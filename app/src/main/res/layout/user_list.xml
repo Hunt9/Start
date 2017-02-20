@@ -3,12 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/UserPic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/com_facebook_button_icon_white"
-        />
     <TextView
         android:id="@+id/UserName"
         android:layout_width="wrap_content"
@@ -26,6 +20,15 @@
         android:layout_toRightOf="@+id/UserPic"
         android:layout_below="@+id/UserName"
         android:layout_marginLeft="5dp"/>
+
+    <ImageView
+        android:id="@+id/UserPic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

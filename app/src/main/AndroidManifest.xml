@@ -3,17 +3,15 @@
     package="com.example.dellpc.start">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
-    <service
-        android:name=".MyFirebaseMessagingService">
+    <service android:name=".MyFirebaseMessagingService">
         <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
         </intent-filter>
     </service>
 
@@ -30,6 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Photos"></activity>
     </application>
 
 </manifest>

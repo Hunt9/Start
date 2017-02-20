@@ -10,15 +10,17 @@ public class User {
         private String name;
         private String email;
         private String photoUrl;
+        private String key;
 
         public User()
         {}
 
-        public User(String id, String name, String email,String photoUrl) {
+        public User(String id, String name, String email,String photoUrl,String key) {
             this.id = id;
             this.name = name;
             this.email = email;
             this.photoUrl = photoUrl;
+            this.key = key;
         }
 
     public String getId() {
@@ -51,5 +53,13 @@ public class User {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

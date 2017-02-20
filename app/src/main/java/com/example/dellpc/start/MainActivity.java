@@ -1,9 +1,13 @@
 package com.example.dellpc.start;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mUserListView;
 
+    private String key;
+
 
     // Progress dialog type (0 - for Horizontal progress bar)
     public static final int progress_bar_type = 0;
@@ -77,24 +83,17 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
 
+    private String UserID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mUsername = ANONYMOUS;
-        mDrawerList = (ListView)findViewById(R.id.navList);
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
 
-       // getSupportFragmentManager().beginTransaction().add(R.id.FrameForPhoto,new Photo()).commit();
 
         mUserListView = (ListView)findViewById(R.id.UzerzzzList);
 
@@ -121,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                UserID = user.getUid();
                 if (user != null) {
 
                     if(DEKHAO == RC_DEKHO)
@@ -129,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-               //   Toast.makeText(MainActivity.this, "Signed In", Toast.LENGTH_SHORT).show();
                     OnSignedInInitialized(user.getDisplayName());
 
                 } else {
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     private void save(String uid, String displayName, String email) {
 
 
-        User userz = new User(uid,displayName,email,null);
+        User userz = new User(uid,displayName,email,null,null);
         mMessageDatabaseRefrence.push().setValue(userz);
 
 
@@ -191,6 +191,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
+                return true;
+            case R.id.Add_Profile_Pic:
+                Intent intent = new Intent(MainActivity.this, Photos.class);
+                intent.putExtra("key",key);
+                startActivity(intent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -233,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     User alltheUserz = dataSnapshot.getValue(User.class);
+                    alltheUserz.setKey(dataSnapshot.getKey());
+                    key = alltheUserz.getKey();
                     mUserAdapter.add(alltheUserz);
 
                 }
@@ -266,10 +274,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void addDrawerItems() {
-        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
-    }
+
 
 }

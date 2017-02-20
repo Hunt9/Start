@@ -1,47 +1,32 @@
 package com.example.dellpc.start;
 
-
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import static android.app.Activity.RESULT_OK;
-
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Photo extends Fragment {
-
+public class Photos extends AppCompatActivity {
 
     private static final int RC_PHOTO_PICKER = 2 ;
     private Button photoPicker;
     private ImageView myImage;
     private TextView skip;
 
-    private View view;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessageDatabaseRefrence;
 
@@ -55,28 +40,22 @@ public class Photo extends Fragment {
 
     private int check = 0;
 
-
-    public Photo() {
-        // Required empty public constructor
-    }
-
-
+    private String keyz;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_photo, container, false);
-            //  mFirebaseDatabase.setPersistenceEnabled(true);
-
-            mFirebaseDatabase = mFirebaseDatabase.getInstance();
-            mFirebaseAuth = mFirebaseAuth.getInstance();
-            mFirebaseStorage = mFirebaseStorage.getInstance();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_photos);
+        mFirebaseDatabase = mFirebaseDatabase.getInstance();
+        mFirebaseAuth = mFirebaseAuth.getInstance();
+        mFirebaseStorage = mFirebaseStorage.getInstance();
 
 
-            mMessageDatabaseRefrence = mFirebaseDatabase.getReference().child("User");
-            mChatPhotoStorageReference = mFirebaseStorage.getReference().child("user_photos");
+        mMessageDatabaseRefrence = mFirebaseDatabase.getReference().child("User");
+        mChatPhotoStorageReference = mFirebaseStorage.getReference().child("user_photos");
 
-        myImage = (ImageView)view.findViewById(R.id.UserImage);
+        keyz
+
+        myImage = (ImageView)findViewById(R.id.UserImage);
         myImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,39 +73,37 @@ public class Photo extends Fragment {
 
 
 
-            photoPicker = (Button)view.findViewById(R.id.UserImageUploadedButton);
+        photoPicker = (Button)findViewById(R.id.UserImageUploadedButton);
         photoPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(check == 1)
                 {
-                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Photos.this, "Uploaded", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getContext(), "Please Select An Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Photos.this, "Please Select An Image", Toast.LENGTH_SHORT).show();
                 }
 
 
             }
         });
 
-        skip = (TextView)view.findViewById(R.id.SKIP);
+        skip = (TextView)findViewById(R.id.SKIP);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
+
+                finish();
+
             }
         });
 
 
 
 
-
-
-
-        return view;
     }
 
 
@@ -140,7 +117,7 @@ public class Photo extends Fragment {
             Uri selectedImageUri = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            Cursor cursor = getContext().getContentResolver().query(selectedImageUri,
+            Cursor cursor = getContentResolver().query(selectedImageUri,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
 
@@ -149,7 +126,7 @@ public class Photo extends Fragment {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImageView imageView = (ImageView)view.findViewById(R.id.UserImage);
+            ImageView imageView = (ImageView)findViewById(R.id.UserImage);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
 //            StorageReference photoReference =
