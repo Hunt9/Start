@@ -53,7 +53,6 @@ public class Photos extends AppCompatActivity {
         mMessageDatabaseRefrence = mFirebaseDatabase.getReference().child("User");
         mChatPhotoStorageReference = mFirebaseStorage.getReference().child("user_photos");
 
-        keyz
 
         myImage = (ImageView)findViewById(R.id.UserImage);
         myImage.setOnClickListener(new View.OnClickListener() {

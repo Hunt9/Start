@@ -57,15 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListner;
 
     private FirebaseStorage mFirebaseStorage;
-    private StorageReference mChatPhotoStorageReference;
 
-    private FirebaseRemoteConfig firebaseRemoteConfig;
-
-    private FirebaseMessagingService mFirebaseMessagingService;
-
-    private String notifications;
-
-    private ProgressDialog pDialog;
 
     private UserAdapter mUserAdapter;
 
@@ -102,12 +94,10 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseDatabase = mFirebaseDatabase.getInstance();
         mFirebaseAuth = mFirebaseAuth.getInstance();
         mFirebaseStorage = mFirebaseStorage.getInstance();
-        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
 
 
         mMessageDatabaseRefrence = mFirebaseDatabase.getReference().child("User");
-        mChatPhotoStorageReference = mFirebaseStorage.getReference().child("user_photos");
 
 
         List<User> friendlyMessages = new ArrayList<>();
