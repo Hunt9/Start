@@ -8,9 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static com.facebook.GraphRequest.TAG;
 
@@ -22,8 +30,25 @@ public class SignUp extends Fragment {
 
     private View view;
 
+    private EditText firstName;
+    private EditText lastName;
+    private EditText email;
+    private EditText contactNo;
+    private EditText password;
+
+    private Button signUp;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mMessageDatabaseRefrence;
+
+    private String fName;
+    private String lName;
+    private String eMail;
+    private String pAssword;
+    private String cOntact;
 
 
     public SignUp() {
@@ -53,6 +78,28 @@ public class SignUp extends Fragment {
             }
         };
 
+        firstName = (EditText)view.findViewById(R.id.FirstName);
+        lastName = (EditText)view.findViewById(R.id.LastName);
+        email = (EditText)view.findViewById(R.id.Email);
+        contactNo = (EditText)view.findViewById(R.id.ContactNumber);
+        password = (EditText)view.findViewById(R.id.SignupPass);
+
+        signUp = (Button)view.findViewById(R.id.SignUP);
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                fName = firstName.getText().toString();
+                lName = lastName.getText().toString();
+                eMail = email.getText().toString();
+                pAssword = password.getText().toString();
+                cOntact = contactNo.getText().toString();
+
+                goSignUp();
+            }
+        });
+
 
 
 
@@ -76,6 +123,29 @@ public class SignUp extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+
+    public void goSignUp()
+    {
+        mAuth.createUserWithEmailAndPassword(eMail, pAssword)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                        User userz = new User(eMail,fName,lName,cOntact,null);
+                        mMessageDatabaseRefrence.push().setValue(userz);
+
+                        if (!task.isSuccessful()) {
+
+                            Toast.makeText(getActivity(), "Failed to Sign up !!!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+
     }
 
 }
